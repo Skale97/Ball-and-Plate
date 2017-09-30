@@ -4,19 +4,11 @@ class Motor
   int ang, maxang, center;
   Serial port;
 
-  Motor() 
-  {
-    ang = 130;
-    on = false;
-   
-    setStartPos(90, 90);
-  }
-
   Motor(int maxang_, int center_) 
   {
     ang = center_;
     on = false;
-    
+
     setStartPos(maxang_, center_);
   }
 
@@ -24,7 +16,7 @@ class Motor
     maxang = maxang_;
     center = center_;
   }
-  
+
   void setPort(Serial port)
   {
     this.port = port;
@@ -34,7 +26,7 @@ class Motor
   {
     if (port != null) {
       if (!on ) ang = center;
-      port.write(ang>center-maxang?center-maxang:ang<center+maxang?center-maxang:ang);
+      port.write(ang>center+maxang?center+maxang:ang<center-maxang?center-maxang:ang);
     }
   }
 

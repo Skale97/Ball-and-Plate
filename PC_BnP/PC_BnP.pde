@@ -9,10 +9,11 @@ Sistem S;
 void setup() 
 {
 
-  m1= new Motor( 40, 125);
-  m2= new Motor( 40, 125);
+  m1= new Motor( 70, 126);
+  m2= new Motor( 70, 126);
 
   size(640, 480);
+  frameRate(30);
 
   cam = new Capture(this, "name=Eye 110,size=640x480,fps=35");
   cam.start();
@@ -29,26 +30,28 @@ void setup()
 }
 
 void draw() {
-  if (cam.available() == true) {    
+  if (cam.available() == true) {  
     S.readCam();
     S.binarization();
     image(S.cam, 0, 0);
+    if (m1.on) println(m1.ang + "    " + m2.ang);
     S.centerOffMass();
     S.update();
-    println(m1.ang + " " + m2.ang);
     point(mouseX, mouseY);
     port.write(0);
     m1.update();
     m2.update();
 
     noFill();
-    line(0, height/2, width, height/2);
-    line(width/2, 0, width/2, height);
+    line(0, S.dest.y, width, S.dest.y);
+    line(S.dest.x, 0, S.dest.x, height);
+    rectMode(CORNERS);
+    if (S.calibration == 2) rect(S.cornerTL.x, S.cornerTL.y, S.cornerBR.x, S.cornerBR.y);
 
-    textSize(20);
+    textSize(14);
     fill(255, 0, 0);
     textAlign(LEFT, TOP);
-    text("Motori: ON: " + m1.on  + "\nPID:\nA " + S.pid.kp.x + "\nS " + S.pid.kd.x + "\nD " + S.pid.ki.x + "\nF " + S.pid.kp.y + "\nG " + S.pid.kd.y + "\nH " + S.pid.ki.y, 0, 0);
+    text("Circle: " + S.circle + "\nCalibration: " + S.calibration + "\nMotori: ON: " + m1.on  + "\nBinarization: ON: " + S.binarization  + "\nThreshold: " + S.threshold + "\nHue: " + S.hueThreshold + "\nPID:\nA " + S.pid.kp.x + "\nS " + S.pid.kd.x + "\nD " + S.pid.ki.x + "\nF " + S.pid.kp.y + "\nG " + S.pid.kd.y + "\nH " + S.pid.ki.y, 0, 0);
   }
 }
 
@@ -58,10 +61,10 @@ boolean mouseOverRect(int x1, int y1, int x2, int y2) {
 
 void keyPressed()
 {
-  if (key == 'q') {
+  if (key == 'e') {
     S.ei.mult(0);
     m1.turn();
     m2.turn();
   }
-  if (key == 'e') exit();
+  if (key == 'r') exit();
 }

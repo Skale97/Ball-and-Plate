@@ -22,7 +22,7 @@ class PID
     d.x *= kd.x;
     d.y *= kd.y;
     mot = PVector.add(PVector.add(p, i), d);
-    m1.ang=-(int)mot.x+m1.center;
+    m1.ang=(int)mot.x+m1.center;
     m2.ang=(int)mot.y+m2.center;
   }
 }
